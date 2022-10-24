@@ -11,8 +11,11 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2ac55d37c9454bac8a31be5a662b79ac7400/0b/d0615984/SendMouseEvents.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2ac55d37c9454bac8a31be5a662b79ac7400/67/d15f31c6/Input.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/86acb61e0d2b4b36bc20af11093be9a5157e00/e5/be82eb20/UnitySynchronizationContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/86acb61e0d2b4b36bc20af11093be9a5157e00/e6/50e57ce7/FormerlySerializedAsAttribute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/86acb61e0d2b4b36bc20af11093be9a5157e00/fd/0bd54afe/AttributeHelperEngine.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9aad1b3a47484d63ba2b3985692d80e946a800/0f/ef0cdbee/ValueTuple`2.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e9b71fdf5d7d40a3b3ba85664cafc7aa3a00/de/e59ec134/NativeInputSystem.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/UIBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -89,6 +92,14 @@
       <workItem from="1666278358154" duration="118000" />
       <workItem from="1666286184164" duration="40000" />
       <workItem from="1666289506452" duration="489000" />
+      <workItem from="1666341089294" duration="133000" />
+      <workItem from="1666439283732" duration="8630000" />
+      <workItem from="1666448003096" duration="1249000" />
+      <workItem from="1666457665983" duration="4831000" />
+      <workItem from="1666511799491" duration="476000" />
+      <workItem from="1666512781853" duration="14460000" />
+      <workItem from="1666535468924" duration="65000" />
+      <workItem from="1666536064268" duration="26000" />
     </task>
     <servers />
   </component>
@@ -111,5 +122,24 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Snake.cs</url>
+          <line>79</line>
+          <properties documentPath="C:\Users\matik\OneDrive\Документы\GitHub\the-snake\The_snake\Assets\Scripts\Snake.cs" initialLine="71" containingFunctionPresentation="method 'ChooseDirectionMove'">
+            <startOffsets>
+              <option value="1773" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1774" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

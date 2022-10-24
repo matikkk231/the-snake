@@ -1,27 +1,39 @@
 using System;
+using JetBrains.Annotations;
+using TMPro;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
-public class snake : MonoBehaviour
+public class Snake : MonoBehaviour
 {
-    public string textValue;
-    public Text textElement;
-    
     private int _length = 7;
     private int _high = 7;
-    private int[,] _theField;
+    private int[,] _field;
 
     private int _snake1;
-    private int _XofSnakeHead = 0;
-    private int _YofSnakeHead = 0;
+    private int _xOfSnakeHead = 0;
+    private int _yOfSnakeHead = 0;
 
-    bool snakeMovingUP = false;
-    bool snakeMovingDOWN = false;
-    bool snakeMovingLEFT = false;
-    bool snakeMovingRIGHT = false;
+    private bool _upMoving = true;
+    private bool _downMoving;
+    private bool _leftMoving;
+    private bool _rightMoving;
+
+    private const int _snakeHead = 1;
+
+    private const string _appleSymbol = "$";
+    private const string _snakeSymbol = "S";
+    private const string _emptySymbol = "0";
+
+    private const int _positionUpdateSeconds = 1;
+
+    private bool _isSnakeDeath;
+
+    private int _lengthSnake = 1;
 
     private void ChooseApple()
     {
@@ -31,12 +43,13 @@ public class snake : MonoBehaviour
         {
             YofApple = Random.Range(0, _high);
             XofApple = Random.Range(0, _length);
-        } while (_theField[XofApple, YofApple] != 0);
+        } while (_field[XofApple, YofApple] != 0);
 
-        _theField[XofApple, YofApple] = -1;
+
+        _field[XofApple, YofApple] = -1;
     }
 
-    private (int centerLength, int centerHigh) FindCenter()
+    private (int highCenter, int lengthCenter) FindCenter()
     {
         int centerLength;
         if (_length % 2 != 0)
@@ -51,95 +64,239 @@ public class snake : MonoBehaviour
         int centerHigh;
         if (_high % 2 != 0)
         {
-            centerHigh = ((_high - 1) / 2);
+            centerHigh = ((_high - 1) / 2) + 1;
         }
         else
         {
             centerHigh = (_high / 2) - 1;
         }
 
-        return (centerLength, centerHigh);
+        return (centerHigh, centerLength);
     }
 
     private void ChooseDirectionMove()
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            snakeMovingUP = true;
-            snakeMovingDOWN = false;
-            snakeMovingLEFT = false;
-            snakeMovingRIGHT = false;
+            _upMoving = true;
+            _downMoving = false;
+            _leftMoving = false;
+            _rightMoving = false;
         }
 
         if (Input.GetKeyDown(KeyCode.S))
         {
-            snakeMovingDOWN = true;
-            snakeMovingUP = false;
-            snakeMovingLEFT = false;
-            snakeMovingRIGHT = false;
+            _downMoving = true;
+            _upMoving = false;
+            _leftMoving = false;
+            _rightMoving = false;
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            snakeMovingLEFT = true;
-            snakeMovingUP = false;
-            snakeMovingDOWN = false;
-            snakeMovingRIGHT = false;
+            _leftMoving = true;
+            _upMoving = false;
+            _downMoving = false;
+            _rightMoving = false;
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            snakeMovingRIGHT = true;
-            snakeMovingUP = false;
-            snakeMovingDOWN = false;
-            snakeMovingLEFT = false;
+            _rightMoving = true;
+            _upMoving = false;
+            _downMoving = false;
+            _leftMoving = false;
         }
     }
 
 
-    private void SnakeMoving()
+    private void MoveSnake()
     {
         // moving
-        if (snakeMovingUP)
+        if (_upMoving)
         {
-            _YofSnakeHead++;
+            _yOfSnakeHead--;
         }
 
-        if (snakeMovingDOWN)
+        if (_downMoving)
         {
-            _YofSnakeHead--;
+            _yOfSnakeHead++;
         }
 
-        if (snakeMovingLEFT)
+        if (_leftMoving)
         {
-            _XofSnakeHead--;
+            _xOfSnakeHead++;
         }
 
-        if (snakeMovingRIGHT)
+        if (_rightMoving)
         {
-            _XofSnakeHead++;
+            _xOfSnakeHead--;
+        }
+    }
+
+    [SerializeField] private TextMeshProUGUI _text;
+
+    private void ShowGame()
+    {
+        string a = null;
+        string mapCondition = "";
+
+        for (int y = 0; y < _high; y++)
+        {
+            if (y != 0)
+            {
+                mapCondition += "\n";
+            }
+
+            for (int x = 0; x < _length; x++)
+            {
+                if (_field[y, x] > 0)
+                {
+                    a = _snakeSymbol;
+                }
+
+                if (_field[y, x] == -1)
+                {
+                    a = _appleSymbol;
+                }
+
+                if (_field[y, x] == 0)
+                {
+                    a = _emptySymbol;
+                }
+
+                mapCondition += a;
+            }
+        }
+
+        _text.text = mapCondition;
+    }
+
+    private void MakeLonger()
+    {
+        for (int y = 0; y < _high; y++)
+        {
+            for (int x = 0; x < _length; x++)
+            {
+                if (_field[y, x] > 0)
+                {
+                    _field[y, x]++;
+                }
+            }
+        }
+    }
+
+    private void CheckIfDeathFirst()
+    {
+        if (_yOfSnakeHead > _high - 1 || _xOfSnakeHead > _length - 1|| _yOfSnakeHead<0|| _xOfSnakeHead<0)
+        {
+            _isSnakeDeath = true;
+        }
+
+        if (_isSnakeDeath)
+        {
+            die();
+        }
+    }
+    private void CheckIfDeathSecond()
+    {
+        int currentSnakeLength = 0;
+        for (int y = 0; y < _high; y++)
+        {
+            for (int x = 0; x < _length; x++)
+            {
+                if (_field[y, x] > 0)
+                {
+                    currentSnakeLength++;
+                }
+            }
+        }
+
+        if (currentSnakeLength < _lengthSnake)
+        {
+            _isSnakeDeath = true;
+        }
+        
+        die();
+        currentSnakeLength = 0;
+        
+    }
+
+    private void die()
+    {
+        if (_isSnakeDeath)
+        {
+            _isSnakeDeath = false;
+            Start();
+        }
+    }
+    private void MakeShorter()
+    {
+        for (int y = 0; y < _high; y++)
+        {
+            for (int x = 0; x < _length; x++)
+            {
+                if (_field[y, x] > _lengthSnake)
+                {
+                    _field[y, x] = 0;
+                }
+            }
+        }
+    }
+
+    private void EatApple()
+    {
+        bool isAplleExist = false;
+        for (int y = 0; y < _high; y++)
+        {
+            for (int x = 0; x < _length; x++)
+            {
+                if (_field[y, x] == -1)
+                {
+                    isAplleExist = true;
+                }
+            }
+        }
+
+        if (isAplleExist == false)
+        {
+            ChooseApple();
+            _lengthSnake++;
         }
     }
 
 
-    private float howMuchTimePassed = 0;
+    private float _howMuchTimePassed = 0;
 
     private void Update()
     {
         ChooseDirectionMove();
-        howMuchTimePassed += Time.deltaTime;
-
-        if (howMuchTimePassed > 2)
+        _howMuchTimePassed += Time.deltaTime;
+        if (_howMuchTimePassed > _positionUpdateSeconds)
         {
-            SnakeMoving();
-            Debug.Log(_YofSnakeHead);
-            howMuchTimePassed = 0;
+            _howMuchTimePassed = 0;
+            MoveSnake();
+            CheckIfDeathFirst();
+            MakeLonger();
+            if (_field[_yOfSnakeHead,_xOfSnakeHead]==-1)
+            {
+                _field[_yOfSnakeHead, _xOfSnakeHead]=1;
+            }
+            else
+            {
+                _field[_yOfSnakeHead, _xOfSnakeHead]++;
+            }
+            MakeShorter();
+            CheckIfDeathSecond();
+            EatApple();
+            ShowGame();
         }
     }
 
     private void Start()
     {
-        _theField = new int[,]
+        _lengthSnake = 1;
+        _field = new int[7, 7]
         {
             { 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0 },
@@ -149,10 +306,7 @@ public class snake : MonoBehaviour
             { 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0 }
         };
-        
-        (_YofSnakeHead, _XofSnakeHead) = FindCenter();
-        _theField[_YofSnakeHead, _XofSnakeHead] = 1;
-        
-       
+        (_yOfSnakeHead, _xOfSnakeHead) = FindCenter();
+        ChooseApple();
     }
 }
